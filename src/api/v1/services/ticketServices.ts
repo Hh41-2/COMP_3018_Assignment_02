@@ -23,6 +23,26 @@ export const BASE_URGENCY = {
        low: 10
 } as const;
 
+const urgencyLevelSummary = (
+       type: 
+           |"critical"
+           |"high"
+           |"medium"
+           |"low"
+): string => {
+       switch (type) {
+              case "critical":
+                     return "Critical. Immediate attention required."
+              case "high":
+                     return "High urgency. Prioritize resolution."
+              case "medium":
+                     return "Moderate. Schedule for attention."
+              case "low":
+                     return "Low urgency. Address when capacity allows."
+       }
+};
+
+
 export const calculateDate = (daysApart: number = 0): string => {
        return new Date(Date.now() - daysApart * 24 * 60 * 60 * 1000).toISOString();
 };
