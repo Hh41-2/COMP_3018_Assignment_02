@@ -1,17 +1,20 @@
-interface tickets {
+export type ticketPriority = "critical" | "high" | "medium" | "low";
+export type ticketStatus = "open" | "resolved";
+
+interface Tickets {
        id: number;
        title: string;
        description: string;
-       priority: string;
-       status: string;
-       createdAt: Date;
+       priority: ticketPriority;
+       status: ticketStatus;
+       createdAt: string;
+}
+
+type TicketWithUrgency = Tickets & {
        ticketAge: number;
        urgencyScore: number;
        urgencyLevel: string;
 }
-
-export type ticketPriority = "critical" | "high" | "medium" | "low";
-export type status = "open" | "resolved";
 
 export const BASE_URGENCY = {
        critical: 50,
