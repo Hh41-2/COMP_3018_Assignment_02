@@ -11,3 +11,9 @@ export const getTicketById = (req: Request, res: Response) => {
        res.json();
 
 }
+
+export const updateTicket = (req: Request, res: Response) => {
+       //call the service function to update a ticket
+       res.json();
+
+}
