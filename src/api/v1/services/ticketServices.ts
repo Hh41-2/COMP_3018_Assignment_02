@@ -1,7 +1,7 @@
 export type ticketPriority = "critical" | "high" | "medium" | "low";
 export type ticketStatus = "open" | "resolved";
 
-interface Tickets {
+interface Ticket {
        id: number;
        title: string;
        description: string;
@@ -10,7 +10,7 @@ interface Tickets {
        createdAt: string;
 }
 
-type TicketWithUrgency = Tickets & {
+type TicketWithUrgency = Ticket & {
        ticketAge: number;
        urgencyScore: number;
        urgencyLevel: string;
@@ -79,3 +79,18 @@ const ticketLists: Tickets[] = [
        }
 ];
 
+export const createATicket = (title: string, description: string, priority: ticketPriority): Ticket => {
+       const lastTicketId: number = ticketLists.length > 0 ? ticketLists[ticketLists.length - 1].id : 0;
+       
+       const newTicket: Ticket = {
+              id: lastTicketId + 1,
+              title: title,
+              description: description,
+              priority: priority,
+              status: "open",
+              createdAt: new Date().toISOString()
+       };
+
+       ticketLists.push(newTicket);
+       return newTicket;
+}
