@@ -27,7 +27,7 @@ export const calculateDate = (daysApart: number = 0): string => {
        return new Date(Date.now() - daysApart * 24 * 60 * 60 * 1000).toISOString();
 };
 
-const ticketLists: Tickets[] = [ 
+const ticketLists: Ticket[] = [ 
        {id: 1,
         title: "Update footer copyright year",
         description: "Footer still shows 2024",
@@ -93,4 +93,8 @@ export const createATicket = (title: string, description: string, priority: tick
 
        ticketLists.push(newTicket);
        return newTicket;
+}
+
+export const getAllTickets = () : Ticket[] => {
+       return ticketLists;
 }
