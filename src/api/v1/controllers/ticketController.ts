@@ -5,3 +5,9 @@ export const getAllTickets = (req: Request, res: Response) => {
        res.json();
 
 }
+
+export const getTicketById = (req: Request, res: Response) => {
+       //call the service function to get the ticket by id
+       res.json();
+
+}
