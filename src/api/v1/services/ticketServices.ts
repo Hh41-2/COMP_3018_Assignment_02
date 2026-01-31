@@ -104,3 +104,20 @@ export const getTicketById = (id: number): Ticket | null => {
        
        return ticketById ? ticketById : null;
 }
+
+export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus?: ticketStatus): Ticket | null => {
+       const ticket = getTicketById(id);
+       if(ticket === null) {
+              return null;
+       }
+
+       if(newPriority !== undefined){
+              ticket.priority = newPriority;
+       }
+       
+       if(newStatus !== undefined){
+              ticket.status = newStatus;
+       }
+       
+       return ticket;
+}
