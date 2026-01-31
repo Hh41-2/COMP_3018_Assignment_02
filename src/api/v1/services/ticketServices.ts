@@ -121,3 +121,14 @@ export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus
        
        return ticket;
 }
+
+export const calculateAge = (id: number): number => {
+       const ticket = getTicketById(id);
+       if(ticket === null){
+              return 0;
+       }
+       const ageInMs = Date.now() - new Date(ticket.createdAt).getTime();
+       const ageInDays = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
+
+       return ageInDays;
+}
