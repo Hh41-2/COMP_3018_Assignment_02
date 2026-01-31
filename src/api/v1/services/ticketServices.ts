@@ -98,3 +98,9 @@ export const createATicket = (title: string, description: string, priority: tick
 export const getAllTickets = () : Ticket[] => {
        return ticketLists;
 }
+
+export const getTicketById = (id: number): Ticket | null => {
+       const ticketById = ticketLists.find((x) => x.id === id);
+       
+       return ticketById ? ticketById : null;
+}
