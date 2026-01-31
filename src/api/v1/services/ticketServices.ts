@@ -22,3 +22,7 @@ export const BASE_URGENCY = {
        medium: 20,
        low: 10
 } as const;
+
+export const calculateDate = (daysApart: number = 0): string => {
+       return new Date(Date.now() - daysApart * 24 * 60 * 60 * 1000).toISOString();
+};
