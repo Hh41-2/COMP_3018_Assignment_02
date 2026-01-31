@@ -11,6 +11,7 @@ interface tickets {
 }
 
 export type ticketPriority = "critical" | "high" | "medium" | "low";
+export type status = "open" | "resolved";
 
 export const BASE_URGENCY = {
        critical: 50,
