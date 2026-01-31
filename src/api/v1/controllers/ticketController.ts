@@ -23,3 +23,9 @@ export const deleteTicket = (req: Request, res: Response) => {
        res.json();
 
 }
+
+export const ticketUrgency = (req: Request, res: Response) => {
+       //call the service function to get a ticket with urgency details
+       res.json();
+
+}
