@@ -17,3 +17,9 @@ export const updateTicket = (req: Request, res: Response) => {
        res.json();
 
 }
+
+export const deleteTicket = (req: Request, res: Response) => {
+       //call the service function to delete a ticket
+       res.json();
+
+}
