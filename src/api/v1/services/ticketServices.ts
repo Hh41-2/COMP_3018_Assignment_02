@@ -37,10 +37,11 @@ const urgencyLevelSummary = (
                      return "High urgency. Prioritize resolution."
               case "medium":
                      return "Moderate. Schedule for attention."
-              case "low":
+              default:
                      return "Low urgency. Address when capacity allows."
        }
 };
+
 
 
 export const calculateDate = (daysApart: number = 0): string => {
@@ -140,4 +141,36 @@ export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus
        }
        
        return ticket;
+}
+
+export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
+       const ticket = getTicketById(id);
+       if(ticket === null){
+              return null;
+       }
+
+       const ageInMs = Date.now() - new Date(ticket.createdAt).getTime();
+       const ageInDays = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
+
+       const multiplier: number = 5;
+       let urgencyScore = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
+
+       let urgencySummary: string;
+
+       if(ticket.status === "resolved"){
+              urgencySummary = "Minimal. Ticket resolved.";
+              urgencyScore = 0;
+       } else {
+              urgencySummary = urgencyLevelSummary(ticket.priority);
+       }
+       
+
+       const ticketWithUrgency: TicketWithUrgency = {
+              ...ticket,
+              ticketAge: ageInDays,
+              urgencyScore: urgencyScore,
+              urgencyLevel: urgencySummary
+       }
+
+       return ticketWithUrgency;
 }
