@@ -55,9 +55,14 @@ export const getAllTickets = (req: Request, res: Response) => {
 export const getTicketByIdWithUrgency = (req: Request, res: Response) => {
        //call the service function to get the ticket by id
        const ticketId: number = Number(req.params.id);
+       if(ticketId <= 0 || !Number.isInteger(ticketId)){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
 
        const ticketWithUrgency = ticketServices.showTicketWithUrgency(ticketId);
-       if(ticketWithUrgency === null || ticketId <= 0){
+       if(ticketWithUrgency === null){
               return res.status(404).json({
                      message: "Ticket not found"
               });
@@ -78,7 +83,17 @@ export const updateTicket = (req: Request, res: Response) => {
 
 export const deleteTicket = (req: Request, res: Response) => {
        //call the service function to delete a ticket
-       res.json();
+       const ticketId: number = Number(req.params.id);
+       if(ticketId <= 0 || !Number.isInteger(ticketId)){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+       const message: string = ticketServices.deleteTicket(ticketId);
+
+       res.status(200).json({
+              message: message
+       });
 
 }
 
