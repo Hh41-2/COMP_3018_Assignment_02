@@ -12,9 +12,21 @@ export const getAllTickets = (req: Request, res: Response) => {
        });
 }
 
-export const getTicketById = (req: Request, res: Response) => {
+export const getTicketByIdWithUrgency = (req: Request, res: Response) => {
        //call the service function to get the ticket by id
-       res.json();
+       const ticketId: number = Number(req.params.id);
+
+       const ticketWithUrgency = ticketServices.showTicketWithUrgency(ticketId);
+       if(ticketWithUrgency === null || ticketId <= 0){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+
+       res.json({
+              message: "Ticket urgency calculated",
+              data: ticketWithUrgency
+       });
 
 }
 
