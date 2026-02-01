@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
+import * as ticketServices from "../services/ticketServices";
+import type { Ticket, TicketWithUrgency } from "../services/ticketServices";
 
 export const getAllTickets = (req: Request, res: Response) => {
        //call the service function to get all the tickets
-       res.json();
-
+       const ticketList: Ticket[] = ticketServices.getAllTickets();
+       res.status(200).json({
+              message: "Tickets retrieved",
+              count: ticketList.length,
+              data: ticketList
+       });
 }
 
 export const getTicketById = (req: Request, res: Response) => {

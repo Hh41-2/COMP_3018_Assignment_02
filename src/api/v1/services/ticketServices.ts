@@ -1,9 +1,7 @@
-import { takeCoverage } from "node:v8";
-
 export type ticketPriority = "critical" | "high" | "medium" | "low";
 export type ticketStatus = "open" | "resolved";
 
-interface Ticket {
+export interface Ticket {
        id: number;
        title: string;
        description: string;
@@ -12,7 +10,7 @@ interface Ticket {
        createdAt: string;
 }
 
-type TicketWithUrgency = Ticket & {
+export type TicketWithUrgency = Ticket & {
        ticketAge: number;
        urgencyScore: number;
        urgencyLevel: string;
