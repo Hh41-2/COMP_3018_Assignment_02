@@ -1,3 +1,5 @@
+import { takeCoverage } from "node:v8";
+
 export type ticketPriority = "critical" | "high" | "medium" | "low";
 export type ticketStatus = "open" | "resolved";
 
@@ -173,4 +175,14 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
        }
 
        return ticketWithUrgency;
+}
+
+export const deleteTicket = (id: number): string => {
+       const index: number = ticketLists.findIndex((x) => x.id === id)
+       if(index < 0){
+              return `Ticket with id: ${id} was not found.`;
+       }
+
+       ticketLists.splice(index, 1);
+       return `Ticket with id: ${id} was successfully deleted.`
 }
