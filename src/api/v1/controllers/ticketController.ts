@@ -77,7 +77,7 @@ export const getTicketById = (req: Request, res: Response) => {
 export const updateTicket = (req: Request, res: Response) => {
        //call the service function to update a ticket
        const ticketPriority: ticketPriority[] = ["critical", "high", "medium", "low"];
-       const ticketStatus: ticketStatus[] = ["open", "resolved"];
+       const ticketStatus: ticketStatus[] = ["open", "resolved", "in-progress"];
        const ticketId: number = Number(req.params.id);
        
        if(ticketId <= 0 || !Number.isInteger(ticketId)){

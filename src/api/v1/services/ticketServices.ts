@@ -1,5 +1,5 @@
 export type ticketPriority = "critical" | "high" | "medium" | "low";
-export type ticketStatus = "open" | "resolved";
+export type ticketStatus = "open" | "resolved" | "in-progress";
 
 export interface Ticket {
        id: number;
