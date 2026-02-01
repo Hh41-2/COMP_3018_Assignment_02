@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as ticketServices from "../services/ticketServices";
-import type { Ticket, TicketWithUrgency } from "../services/ticketServices";
+import type { Ticket } from "../services/ticketServices";
 
 export const getAllTickets = (req: Request, res: Response) => {
        //call the service function to get all the tickets
