@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as ticketServices from "../services/ticketServices";
-import type { Ticket, ticketPriority } from "../services/ticketServices";
+import type { Ticket, ticketPriority, ticketStatus } from "../services/ticketServices";
 
 export const createTicket = (req: Request, res: Response) => {
        //call the service function to create a new ticket
@@ -76,7 +76,46 @@ export const getTicketById = (req: Request, res: Response) => {
 
 export const updateTicket = (req: Request, res: Response) => {
        //call the service function to update a ticket
+       const ticketPriority: ticketPriority[] = ["critical", "high", "medium", "low"];
+       const ticketStatus: ticketStatus[] = ["open", "resolved"];
+       const ticketId: number = Number(req.params.id);
        
+       if(ticketId <= 0 || !Number.isInteger(ticketId)){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+
+       if(req.body.priority){
+              if(!req.body.priority || !ticketPriority.includes(req.body.priority as ticketPriority)){
+                     return res.status(400).json({
+                            message: "Invalid priority. Must be one of: critical, high, medium, low"
+                     });
+              }
+       }
+
+       if(req.body.status){
+              if(!req.body.status || !ticketStatus.includes(req.body.priority as ticketStatus)){
+                     return res.status(400).json({
+                            message: "Invalid priority. Must be one of: critical, high, medium, low"
+                     });
+              }
+       }
+
+       const newPriority: ticketPriority = req.body.priority;
+       const newStatus: ticketStatus = req.body.status;
+
+       const updatedTicket = ticketServices.updateTicket(ticketId, newPriority, newStatus);
+       if(updatedTicket === null){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+
+       return res.status(200).json({
+              message: "Ticket successfully updated",
+              data: updateTicket
+       });
 }
 
 export const deleteTicket = (req: Request, res: Response) => {
