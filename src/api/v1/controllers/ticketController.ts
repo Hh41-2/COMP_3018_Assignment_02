@@ -31,8 +31,7 @@ export const createTicket = (req: Request, res: Response) => {
               const newTicket: Ticket = ticketServices.createATicket(title, description, priority);
 
               res.status(201).json({
-                     message: `A new ticket is created with title: ${title}, description: ${description},
-                     and priority: ${priority}.`,
+                     message: `A new ticket is created with title: ${title}, description: ${description}, and priority: ${priority}.`,
                      data: newTicket
               });
        } catch (error){
@@ -52,7 +51,7 @@ export const getAllTickets = (req: Request, res: Response) => {
        });
 }
 
-export const getTicketByIdWithUrgency = (req: Request, res: Response) => {
+export const getTicketById = (req: Request, res: Response) => {
        //call the service function to get the ticket by id
        const ticketId: number = Number(req.params.id);
        if(ticketId <= 0 || !Number.isInteger(ticketId)){
@@ -61,18 +60,17 @@ export const getTicketByIdWithUrgency = (req: Request, res: Response) => {
               });
        }
 
-       const ticketWithUrgency = ticketServices.showTicketWithUrgency(ticketId);
-       if(ticketWithUrgency === null){
+       const ticket = ticketServices.getTicketById(ticketId);
+       if(ticket === null){
               return res.status(404).json({
                      message: "Ticket not found"
               });
        }
 
-       res.json({
-              message: "Ticket urgency calculated",
-              data: ticketWithUrgency
+       return res.status(200).json({
+              message: `Ticket with id: ${ticketId} found`,
+              data: ticket
        });
-
 }
 
 
@@ -99,6 +97,24 @@ export const deleteTicket = (req: Request, res: Response) => {
 
 export const ticketUrgency = (req: Request, res: Response) => {
        //call the service function to get a ticket with urgency details
+       const ticketId: number = Number(req.params.id);
+       if(ticketId <= 0 || !Number.isInteger(ticketId)){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+
+       const ticketWithUrgency = ticketServices.showTicketWithUrgency(ticketId);
+       if(ticketWithUrgency === null){
+              return res.status(404).json({
+                     message: "Ticket not found"
+              });
+       }
+
+       res.json({
+              message: "Ticket urgency calculated",
+              data: ticketWithUrgency
+       });
        res.json();
 
 }
