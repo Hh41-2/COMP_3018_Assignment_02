@@ -23,26 +23,37 @@ export const BASE_URGENCY = {
        low: 10
 } as const;
 
-const urgencyLevelSummary = (
+const urgencyLevelStatement = (
+       score: number
+): 
+       |"critical-level"
+       |"high-level"
+       |"medium-level"
+       |"low-level" => {
+       if(score >= 80) return "critical-level";
+       if(score >= 55) return "high-level";
+       if(score >= 30) return "medium-level";
+       return "low-level";
+}       
+
+const urgencyLevelSummaryByScore = (
        type: 
-           |"critical"
-           |"high"
-           |"medium"
-           |"low"
+              |"critical-level"
+              |"high-level"
+              |"medium-level"
+              |"low-level"
 ): string => {
        switch (type) {
-              case "critical":
+              case "critical-level":
                      return "Critical. Immediate attention required."
-              case "high":
+              case "high-level":
                      return "High urgency. Prioritize resolution."
-              case "medium":
+              case "medium-level":
                      return "Moderate. Schedule for attention."
-              default:
+              case "low-level":
                      return "Low urgency. Address when capacity allows."
        }
-};
-
-
+}
 
 export const calculateDate = (daysApart: number = 0): string => {
        return new Date(Date.now() - daysApart * 24 * 60 * 60 * 1000).toISOString();
@@ -156,14 +167,14 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
        let urgencyScore = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
 
        let urgencySummary: string;
+       const urgencyType = urgencyLevelStatement(urgencyScore);
 
        if(ticket.status === "resolved"){
               urgencySummary = "Minimal. Ticket resolved.";
               urgencyScore = 0;
        } else {
-              urgencySummary = urgencyLevelSummary(ticket.priority);
+              urgencySummary = urgencyLevelSummaryByScore(urgencyType);
        }
-       
 
        const ticketWithUrgency: TicketWithUrgency = {
               ...ticket,
@@ -184,3 +195,4 @@ export const deleteTicket = (id: number): string => {
        ticketLists.splice(index, 1);
        return `Ticket with id: ${id} was successfully deleted.`
 }
+
