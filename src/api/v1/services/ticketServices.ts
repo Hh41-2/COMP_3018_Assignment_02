@@ -224,15 +224,19 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
               return null;
        }
 
+       /** Calculate the ticket age based on the creation date */
        const ageInMs = Date.now() - new Date(ticket.createdAt).getTime();
        const ageInDays = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
 
        const multiplier: number = 5;
+
+       /** Calculate the ticket urgency scorer based on the base urgency point, the ticket age and multiplier */ 
        let urgencyScore = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
 
        let urgencySummary: string;
        const urgencyType = urgencyLevelStatement(urgencyScore);
 
+       /** Hnadling resolved situation */
        if(ticket.status === "resolved"){
               urgencySummary = "Minimal. Ticket resolved.";
               urgencyScore = 0;
