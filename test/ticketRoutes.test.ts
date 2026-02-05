@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../src/app";
 import * as ticketController from "../src/api/v1/controllers/ticketController";
-import { calculateDate } from "../src/api/v1/services/ticketServices";
+import { calculateDate, Ticket, TicketWithUrgency } from "../src/api/v1/services/ticketServices";
 
 jest.mock("../src/api/v1/controllers/ticketController", () => ({
     healthCheck: jest.fn((req, res) => res.status(200).send()),
@@ -32,7 +32,7 @@ describe("Route Tests using mocks", () => {
 
        it("should call a function getTicketById controller", async () => {
               // Arrange
-              const mockTicket = {
+              const mockTicket: Ticket = {
                       id: 2,
                       title: "Profile picture upload slow",
                       description: "Upload takes 30+ seconds",
@@ -50,7 +50,7 @@ describe("Route Tests using mocks", () => {
 
        it("should call a function ticketUrgency controller", async () => {
               // Arrange
-              const mockTicket = {
+              const mockTicket: TicketWithUrgency = {
                      "id": 6,
                      "title": "Login page not loading",
                      "description": "Users report blank screen on login",

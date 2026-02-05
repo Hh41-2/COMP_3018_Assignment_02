@@ -184,7 +184,7 @@ export const getAllTickets = () : Ticket[] => {
  *  @return The ticket with specific id
  */
 export const getTicketById = (id: number): Ticket | null => {
-       const ticketById = ticketLists.find((x) => x.id === id);
+       const ticketById: Ticket | undefined = ticketLists.find((x) => x.id === id);
        
        return ticketById ? ticketById : null;
 }
@@ -197,7 +197,7 @@ export const getTicketById = (id: number): Ticket | null => {
  * @returns an updated ticket
  */
 export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus?: ticketStatus): Ticket | null => {
-       const ticket = getTicketById(id);
+       const ticket: Ticket | null = getTicketById(id);
        if(ticket === null) {
               return null;
        }
@@ -219,22 +219,22 @@ export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus
  * @returns a ticket with detailed urgency information
  */
 export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
-       const ticket = getTicketById(id);
+       const ticket: Ticket | null = getTicketById(id);
        if(ticket === null){
               return null;
        }
 
        /** Calculate the ticket age based on the creation date */
-       const ageInMs = Date.now() - new Date(ticket.createdAt).getTime();
-       const ageInDays = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
+       const ageInMs: number = Date.now() - new Date(ticket.createdAt).getTime();
+       const ageInDays: number = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
 
        const multiplier: number = 5;
 
        /** Calculate the ticket urgency scorer based on the base urgency point, the ticket age and multiplier */ 
-       let urgencyScore = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
+       let urgencyScore: number = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
 
        let urgencySummary: string;
-       const urgencyType = urgencyLevelStatement(urgencyScore);
+       const urgencyType: string = urgencyLevelStatement(urgencyScore);
 
        /** Hnadling resolved situation  */
        if(ticket.status === "resolved"){

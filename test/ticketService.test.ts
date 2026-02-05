@@ -1,4 +1,4 @@
-import { calculateDate, showTicketWithUrgency, Ticket } from "../src/api/v1/services/ticketServices";
+import { calculateDate, showTicketWithUrgency, Ticket, TicketWithUrgency } from "../src/api/v1/services/ticketServices";
 
 describe("showTicketWithUrgency", () => {
        it(`should return with urgency score of 25 and message containing "Low"`, () => {
@@ -13,7 +13,7 @@ describe("showTicketWithUrgency", () => {
               }
 
               // Act
-              const ticketWithUrgency = showTicketWithUrgency(ticketSample.id);
+              const ticketWithUrgency: TicketWithUrgency | null = showTicketWithUrgency(ticketSample.id);
 
               // Assert
               expect(ticketWithUrgency?.urgencyScore).toBe(25);
@@ -32,7 +32,7 @@ describe("showTicketWithUrgency", () => {
               }
 
               // Act
-              const ticketWithUrgency = showTicketWithUrgency(ticketSample.id);
+              const ticketWithUrgency: TicketWithUrgency | null = showTicketWithUrgency(ticketSample.id);
 
               // Assert
               expect(ticketWithUrgency?.urgencyScore).toBe(50);
@@ -51,7 +51,7 @@ describe("showTicketWithUrgency", () => {
               }
 
               // Act
-              const ticketWithUrgency = showTicketWithUrgency(ticketSample.id);
+              const ticketWithUrgency: TicketWithUrgency | null = showTicketWithUrgency(ticketSample.id);
 
               // Assert
               expect(ticketWithUrgency?.urgencyScore).toBe(0);

@@ -140,7 +140,7 @@ export const updateTicket = (req: Request, res: Response): void => {
        const newPriority: ticketPriority = req.body.priority;
        const newStatus: ticketStatus = req.body.status;
 
-       const updatedTicket = ticketServices.updateTicket(ticketId, newPriority, newStatus);
+       const updatedTicket: Ticket | null = ticketServices.updateTicket(ticketId, newPriority, newStatus);
        
        // Check if ticket was found
        if(updatedTicket === null){
