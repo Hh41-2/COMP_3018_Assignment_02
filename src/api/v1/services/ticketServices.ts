@@ -1,28 +1,60 @@
+/** Represents the different ticket priority */ 
 export type ticketPriority = "critical" | "high" | "medium" | "low";
+
+/** Represents the different ticket status */ 
 export type ticketStatus = "open" | "resolved" | "in-progress";
 
+/** 
+ * Represents a ticket with the detail information of ticket 
+ */ 
 export interface Ticket {
+       /** Unique identifier for a ticket */
        id: number;
+
+       /** The title of a ticket */
        title: string;
+
+       /** The description of a ticket */
        description: string;
+
+       /** The priority/urgency of a ticket */
        priority: ticketPriority;
+
+       /** The current status of a ticket */
        status: ticketStatus;
+
+       /** The ticket creation date */
        createdAt: string;
 }
 
+/**
+ * Represents the detail of ticket urgency
+ */
 export type TicketWithUrgency = Ticket & {
+       /** The age of a ticket in days since its creation  */
        ticketAge: number;
+
+       /** The urgency score calculated based on ticket's age and priority */
        urgencyScore: number;
+
+       /** The summary of the current urgency */
        urgencyLevel: string;
 }
 
+/**
+ * Base score depending on the priority
+ */
 export const BASE_URGENCY = {
        critical: 50,
        high: 30,
        medium: 20,
        low: 10
 } as const;
-
+/**
+ * Classifies the urgency level based on the urgency score
+ * @param score - The urgency score  
+ * @returns The statement summary 
+ */
 const urgencyLevelStatement = (
        score: number
 ): 
@@ -35,7 +67,11 @@ const urgencyLevelStatement = (
        if(score >= 30) return "medium-level";
        return "low-level";
 }       
-
+/**
+ * Provides a summary of urgency level
+ * @param type - The urgency statement type
+ * @returns A message of current urgency level
+ */
 const urgencyLevelSummaryByScore = (
        type: 
               |"critical-level"
@@ -55,10 +91,16 @@ const urgencyLevelSummaryByScore = (
        }
 }
 
+/** 
+ *  Calculate how many days passed by from today
+ *  @param daysApart - Number of days passed by from today
+ *  @returns An ISO-8601 timestamp for a days before today
+ */
 export const calculateDate = (daysApart: number = 0): string => {
        return new Date(Date.now() - daysApart * 24 * 60 * 60 * 1000).toISOString();
 };
 
+/** Provided list of tickets */
 const ticketLists: Ticket[] = [ 
        {id: 1,
         title: "Update footer copyright year",
@@ -111,6 +153,11 @@ const ticketLists: Ticket[] = [
        }
 ];
 
+/** Create a new ticket based on the parameters
+ *  @param title - The title for a new ticket
+ *  @param description - The description for a new ticket
+ *  @param priority - The priority for a new ticket
+ */
 export const createATicket = (title: string, description: string, priority: ticketPriority): Ticket => {
        const lastTicketId: number = ticketLists.length > 0 ? ticketLists[ticketLists.length - 1].id : 0;
        
@@ -127,16 +174,28 @@ export const createATicket = (title: string, description: string, priority: tick
        return newTicket;
 }
 
+/** Return all the tickets created in the list */
 export const getAllTickets = () : Ticket[] => {
        return ticketLists;
 }
 
+/** Search the ticket with id
+ *  @param id - id required to search a specific ticket 
+ *  @return The ticket with specific id
+ */
 export const getTicketById = (id: number): Ticket | null => {
        const ticketById = ticketLists.find((x) => x.id === id);
        
        return ticketById ? ticketById : null;
 }
 
+/**
+ * Updates existing tickets with provided parameters
+ * @param id - id of a specific ticket
+ * @param newPriority - Optional param to update the existing priority 
+ * @param newStatus - Optional param to update the existing status 
+ * @returns an updated ticket
+ */
 export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus?: ticketStatus): Ticket | null => {
        const ticket = getTicketById(id);
        if(ticket === null) {
@@ -154,6 +213,11 @@ export const updateTicket = (id: number, newPriority?: ticketPriority, newStatus
        return ticket;
 }
 
+/**
+ * Calculates the urgency score and provides a message based on the urgency level
+ * @param id - id of a specific ticket
+ * @returns a ticket with detailed urgency information
+ */
 export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
        const ticket = getTicketById(id);
        if(ticket === null){
@@ -185,7 +249,11 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
 
        return ticketWithUrgency;
 }
-
+/**
+ * Delete an existing ticket with specific id
+ * @param id - id of a specific ticket
+ * @returns a summary of deletion process
+ */
 export const deleteTicket = (id: number): string => {
        const index: number = ticketLists.findIndex((x) => x.id === id)
        if(index < 0){
