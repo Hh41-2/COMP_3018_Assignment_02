@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as ticketServices from "../services/ticketServices";
-import type { Ticket, ticketPriority, ticketStatus } from "../services/ticketServices";
+import type { Ticket, ticketPriority, ticketStatus, TicketWithUrgency } from "../services/ticketServices";
 
 /**
  * Creates a new ticket based on the request body
@@ -8,28 +8,28 @@ import type { Ticket, ticketPriority, ticketStatus } from "../services/ticketSer
  * @param res - The response from the API call
  * @returns Returns either failure message or creation message with a new ticket data
  */
-export const createTicket = (req: Request, res: Response) => {
+export const createTicket = (req: Request, res: Response): void => {
        //call the service function to create a new ticket
        try {
               const ticketPriority: ticketPriority[] = ["critical", "high", "medium", "low"];
               
               // Validate new ticket title
               if(typeof req.body.title !== "string" || req.body.title.trim() ===""){
-                     return res.status(400).json({
+                     res.status(400).json({
                             message: "Missing required field: title"
                      });
               } 
 
               // Validate new ticket description
               if(typeof req.body.description !== "string" || req.body.description.trim() ===""){
-                     return res.status(400).json({
+                     res.status(400).json({
                             message: "Missing required field: description"
                      });
               } 
 
               // Validate new ticket priority
               if(!req.body.priority || !ticketPriority.includes(req.body.priority as ticketPriority)){
-                     return res.status(400).json({
+                     res.status(400).json({
                             message: "Invalid priority. Must be one of: critical, high, medium, low"
                      });
               } 
@@ -45,8 +45,8 @@ export const createTicket = (req: Request, res: Response) => {
                      data: newTicket
               });
        } catch (error){
-              return res.status(500).json({
-                            message: "Failed to create a new ticket."
+              res.status(500).json({
+                     message: "Failed to create a new ticket."
               });
        }
 }
@@ -57,7 +57,7 @@ export const createTicket = (req: Request, res: Response) => {
  * @param res - The response from the API call
  * @returns Returns all the ticket data
  */
-export const getAllTickets = (req: Request, res: Response) => {
+export const getAllTickets = (req: Request, res: Response): void => {
        // Call the service function to get all the tickets
        const ticketList: Ticket[] = ticketServices.getAllTickets();
        res.status(200).json({
@@ -73,27 +73,27 @@ export const getAllTickets = (req: Request, res: Response) => {
  * @param res - The response from the API call
  * @returns Returns a ticket data with a specific id
  */
-export const getTicketById = (req: Request, res: Response) => {
+export const getTicketById = (req: Request, res: Response): void => {
        // Call the service function to get the ticket by id
 
        // Validate ticket Id
        const ticketId: number = Number(req.params.id);
        if(ticketId <= 0 || !Number.isInteger(ticketId)){
-              return res.status(400).json({
+              res.status(400).json({
                      message: "Id must be a positive integer"
               });
        }
 
-       const ticket = ticketServices.getTicketById(ticketId);
+       const ticket: Ticket | null = ticketServices.getTicketById(ticketId);
 
        // Check if ticket was found
        if(ticket === null){
-              return res.status(404).json({
+              res.status(404).json({
                      message: "Ticket not found"
               });
        }
 
-       return res.status(200).json({
+       res.status(200).json({
               message: `Ticket with id: ${ticketId} found`,
               data: ticket
        });
@@ -106,7 +106,7 @@ export const getTicketById = (req: Request, res: Response) => {
  * @param res - The response from the API call
  * @returns Returns either failure message or success message with a updated ticket data
  */
-export const updateTicket = (req: Request, res: Response) => {
+export const updateTicket = (req: Request, res: Response): void => {
        //call the service function to update a ticket
        const ticketPriority: ticketPriority[] = ["critical", "high", "medium", "low"];
        const ticketStatus: ticketStatus[] = ["open", "resolved", "in-progress"];
@@ -114,7 +114,7 @@ export const updateTicket = (req: Request, res: Response) => {
        
        // Validate ticket Id
        if(ticketId <= 0 || !Number.isInteger(ticketId)){
-              return res.status(400).json({
+              res.status(400).json({
                      message: "Id must be a positive integer"
               });
        }
@@ -122,7 +122,7 @@ export const updateTicket = (req: Request, res: Response) => {
        // Validate priority if received
        if(req.body.priority !== undefined){
               if(typeof req.body.priority !== "string" || !ticketPriority.includes(req.body.priority as ticketPriority)){
-                     return res.status(400).json({
+                     res.status(400).json({
                             message: "Invalid priority. Must be one of: critical, high, medium, low"
                      });
               }
@@ -131,7 +131,7 @@ export const updateTicket = (req: Request, res: Response) => {
        // Validate status if received
        if(req.body.status !== undefined){
               if(typeof req.body.status !== "string" || !ticketStatus.includes(req.body.status as ticketStatus)){
-                     return res.status(400).json({
+                     res.status(400).json({
                             message: "Invalid status. Must be one of: open, in-progress, resolved"
                      });
               }
@@ -144,12 +144,12 @@ export const updateTicket = (req: Request, res: Response) => {
        
        // Check if ticket was found
        if(updatedTicket === null){
-              return res.status(404).json({
+              res.status(404).json({
                      message: "Ticket not found"
               });
        }
 
-       return res.status(200).json({
+       res.status(200).json({
               message: "Ticket successfully updated",
               data: updatedTicket
        });
@@ -160,19 +160,19 @@ export const updateTicket = (req: Request, res: Response) => {
  * @param res - The response from the API call
  * @returns Returns either failure message or success message
  */
-export const deleteTicket = (req: Request, res: Response) => {
+export const deleteTicket = (req: Request, res: Response): void => {
        // call the service function to delete a ticket
        
        // Validate ticket Id
        const ticketId: number = Number(req.params.id);
        if(ticketId <= 0 || !Number.isInteger(ticketId)){
-              return res.status(404).json({
+              res.status(404).json({
                      message: "Ticket not found"
               });
        }
        const message: string = ticketServices.deleteTicket(ticketId);
 
-       return res.status(200).json({
+       res.status(200).json({
               message: message
        });
 
@@ -185,27 +185,27 @@ export const deleteTicket = (req: Request, res: Response) => {
  * @param res - The response object used to send the response back to the client
  * @returns Returns either failure message or success message with a ticket data with urgency details
  */
-export const ticketUrgency = (req: Request, res: Response) => {
+export const ticketUrgency = (req: Request, res: Response): void => {
        //call the service function to get a ticket with urgency details
 
        // Validate ticket Id
        const ticketId: number = Number(req.params.id);
        if(ticketId <= 0 || !Number.isInteger(ticketId)){
-              return res.status(400).json({
+              res.status(400).json({
                      message: "Id must be a positive integer"
               });
        }
 
-       const ticketWithUrgency = ticketServices.showTicketWithUrgency(ticketId);
+       const ticketWithUrgency: TicketWithUrgency | null = ticketServices.showTicketWithUrgency(ticketId);
 
        // Check if the ticket was found or not
        if(ticketWithUrgency === null){
-              return res.status(404).json({
+              res.status(404).json({
                      message: "Ticket not found"
               });
        }
 
-       return res.json({
+       res.json({
               message: "Ticket urgency calculated",
               data: ticketWithUrgency
        });
@@ -213,7 +213,7 @@ export const ticketUrgency = (req: Request, res: Response) => {
 /** 
  * Check the status of the server
  */
-export const healthCheck = (req: Request, res: Response) => {
+export const healthCheck = (req: Request, res: Response): void => {
        res.status(200).json({
         status: "OK",
         uptime: process.uptime(),

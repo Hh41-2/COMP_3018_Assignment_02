@@ -236,7 +236,7 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
        let urgencySummary: string;
        const urgencyType = urgencyLevelStatement(urgencyScore);
 
-       /** Hnadling resolved situation */
+       /** Hnadling resolved situation  */
        if(ticket.status === "resolved"){
               urgencySummary = "Minimal. Ticket resolved.";
               urgencyScore = 0;
