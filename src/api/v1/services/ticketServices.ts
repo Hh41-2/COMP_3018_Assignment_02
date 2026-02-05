@@ -234,7 +234,7 @@ export const showTicketWithUrgency = (id: number): TicketWithUrgency | null => {
        let urgencyScore: number = BASE_URGENCY[ticket.priority] + (ageInDays * multiplier);
 
        let urgencySummary: string;
-       const urgencyType: string = urgencyLevelStatement(urgencyScore);
+       const urgencyType = urgencyLevelStatement(urgencyScore);
 
        /** Hnadling resolved situation  */
        if(ticket.status === "resolved"){
